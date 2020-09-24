@@ -1,0 +1,7 @@
+requests
+openpyxl
+black
+mypy
+pylint
+beautifulsoup4
+more-itertools
