@@ -29,14 +29,18 @@ Creates a `students.csv` and `staff.csv` with the student:staff and staff:team p
 
 ## Usage
 
-`bottlenose_teams.py [-h] [-c COURSE] [-l LAB] [--staff STAFF [STAFF ...]] [-o OFFSET] [-s SHEET] [--latest]`
+`bottlenose_teams.py [-h] [-o OFFSET] [-s SHEET] [--latest] course lab staff [staff ...]`
+
+positional arguments:
+```
+  course                        ID of the course
+  lab                           CRN of lab section
+  staff                         Names of staff members
+```
 
 optional arguments:
 ```
   -h, --help                    show this help message and exit
-  -c COURSE, --course COURSE    ID of the course
-  -l LAB, --lab LAB             CRN of lab section
-  --staff STAFF [STAFF ...]     Names of staff members
   -o OFFSET, --offset OFFSET    Used to rotate staff members
   -s SHEET, --sheet SHEET       Name of sheet to read team data
   --latest                      Uses the latest teamsets
