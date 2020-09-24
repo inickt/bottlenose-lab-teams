@@ -130,8 +130,8 @@ def main(
         csvwriter = csv.writer(file)
         csvwriter.writerow(
             [
-                "Group #",
-                "Team #",
+                "Group",
+                "Team",
                 "Staff",
                 "Member 1",
                 "Member 2",
@@ -181,9 +181,9 @@ if __name__ == "__main__":
             "variables can be set to fully automate this script"
         ),
     )
-    parser.add_argument("-c", "--course", type=int, help="ID of the course")
-    parser.add_argument("-l", "--lab", type=int, help="CRN of lab section")
-    parser.add_argument("--staff", nargs="+", help="Names of staff members")
+    parser.add_argument("course", type=int, help="ID of the course")
+    parser.add_argument("lab", type=int, help="CRN of lab section")
+    parser.add_argument("staff", nargs="+", help="Names of staff members")
     parser.add_argument(
         "-o", "--offset", type=int, default=0, help="Used to rotate staff members"
     )
