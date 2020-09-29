@@ -70,7 +70,7 @@ def parse(workbook: Workbook, worksheet_name: str) -> List[Team]:
         Team(
             team_id=row[0].value,
             active=row[1].value == "Yes",
-            lab_sections=[int(crn) for crn in row[4].value.split(',') if crn],
+            lab_sections=[int(crn) for crn in row[4].value.split(",") if crn],
             member1=without_email(row[6].value),
             member2=without_email(row[7].value) if row[7].value else None,
             member3=without_email(row[8].value) if row[8].value else None,
@@ -87,6 +87,7 @@ def main(
     sheet_name: Optional[str],
     latest: bool,
     staff: List[str],
+    excluded: List[int],
     username: str,
     password: str,
 ):
@@ -107,7 +108,11 @@ def main(
     # parse teams from workbook
     teams: List[Team] = sorted(parse(workbook, sheet_name))
     my_teams: List[Team] = [
-        team for team in teams if lab_section in team.lab_sections and team.active
+        team
+        for team in teams
+        if lab_section in team.lab_sections
+        and team.active
+        and team.team_id not in excluded
     ]
     staff_assignments: List[Tuple[int, str]] = list(
         zip(range(len(staff)), staff[offset:] + staff[:offset])
@@ -193,6 +198,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--latest", action="store_true", help="Uses the latest teamsets"
     )
+    parser.add_argument(
+        "--exclude", type=int, nargs="+", help="Excluded teamsets by ID"
+    )
     args = parser.parse_args()
 
     main(
@@ -202,6 +210,7 @@ if __name__ == "__main__":
         sheet_name=args.sheet,
         latest=args.latest,
         staff=args.staff,
+        excluded=args.exclude or [],
         username=os.getenv("KHOURY_USERNAME", input("Khoury username: ")),
         password=os.getenv("KHOURY_PASSWORD", getpass("Khoury password: ")),
     )
