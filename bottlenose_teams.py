@@ -17,7 +17,7 @@ from more_itertools import divide
 class Team:
     team_id: int
     active: bool
-    lab_section: Optional[int]
+    lab_sections: List[int]
     member1: str
     member2: Optional[str]
     member3: Optional[str]
@@ -70,7 +70,7 @@ def parse(workbook: Workbook, worksheet_name: str) -> List[Team]:
         Team(
             team_id=row[0].value,
             active=row[1].value == "Yes",
-            lab_section=int(row[4].value) if row[4].value else None,
+            lab_sections=[int(crn) for crn in row[4].value.split(',') if crn],
             member1=without_email(row[6].value),
             member2=without_email(row[7].value) if row[7].value else None,
             member3=without_email(row[8].value) if row[8].value else None,
@@ -107,7 +107,7 @@ def main(
     # parse teams from workbook
     teams: List[Team] = sorted(parse(workbook, sheet_name))
     my_teams: List[Team] = [
-        team for team in teams if team.lab_section == lab_section and team.active
+        team for team in teams if lab_section in team.lab_sections and team.active
     ]
     staff_assignments: List[Tuple[int, str]] = list(
         zip(range(len(staff)), staff[offset:] + staff[:offset])
